@@ -1,4 +1,6 @@
-﻿namespace HomeWork4
+﻿
+
+namespace TextTurnRpg
 {
     internal class TextTurnRpg
     {       

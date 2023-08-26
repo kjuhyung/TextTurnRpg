@@ -65,7 +65,7 @@ public class Warrior : ICharacter
 
     public void AttackAction() // 공격하는 메서드
     {
-        Console.WriteLine($" {Name} 의 공격!!! 공격력 :{Attack} ");
+        Console.WriteLine($" {Name} 의 공격!!! 공격력 : {Attack} ");
         Console.WriteLine();
         Console.WriteLine($" {Name} 이 검을 휘두릅니다. ");
     }
@@ -74,7 +74,7 @@ public class Warrior : ICharacter
         if (!IsDead)
         {
             Health -= damage;
-            Console.WriteLine($" {damage} 의 데미지를 입었습니다. 남은 체력: {Health}");            
+            Console.WriteLine($" {damage} 의 데미지를 입었습니다. {Name} 의 남은 체력: {Health}");            
         }
     }
 }
@@ -98,7 +98,7 @@ public class Monster : ICharacter
         if (!IsDead)
         {
             Health -= damage;
-            Console.WriteLine($" {damage} 의 데미지를 입었습니다. 남은 체력: {Health}");            
+            Console.WriteLine($" {damage} 의 데미지를 입었습니다. {Name} 의 남은 체력: {Health}");
         }
     }
     public virtual void AttackAction()
@@ -117,7 +117,7 @@ public class Goblin : Monster
     }
     public override void AttackAction()
     {
-        Console.WriteLine($" {Name} 의 공격!!! 공격력 :{Attack} ");
+        Console.WriteLine($" {Name} 의 공격!!! 공격력 : {Attack} ");
         Console.WriteLine();
         Console.WriteLine($" {Name} 이 방망이를 휘두릅니다. ");
     }
@@ -133,7 +133,7 @@ public class Dragon : Monster
     }
     public override void AttackAction()
     {
-        Console.WriteLine($" {Name} 의 공격!!! 공격력 :{Attack} ");
+        Console.WriteLine($" {Name} 의 공격!!! 공격력 : {Attack} ");
         Console.WriteLine();
         Console.WriteLine($" {Name} 이 불을 내뿜습니다. ");
     }
@@ -163,10 +163,27 @@ namespace TextTurnRpg
             while (IsPlaying)
             {
                 Console.WriteLine();
-                Console.Write(" 다음 행동을 선택하세요 : ");
-                CheckUserInput();                
+                
+                if (turn % 2 == 1)
+                {
+                    Console.Write(" 다음 행동을 선택하세요 (1~3) : ");
+                    CheckUserInput();
+                    Console.WriteLine();
+                    Console.WriteLine(" ~ Player Trun ~ "); // test
+                    Console.WriteLine();
+                    warrior.AttackAction();
+                    Console.WriteLine();
+                    gob.TakeDamage(warrior.Attack);
+                }
+                else
+                {
+                    Console.WriteLine(" ~ Monster turn ~ "); // test 
+                    Console.WriteLine();
+                    gob.AttackAction();
+                    Console.WriteLine();
+                    warrior.TakeDamage(gob.Attack);
+                }
                 turn++;
-                CheckComputerChoice();
                 if (warrior.Health <= 0 || gob.Health <= 0)
                     break;
             }
@@ -185,43 +202,15 @@ namespace TextTurnRpg
                 case 2:
                     // 아이템 사용
                     break;
-                case 1:
-                    AttackText(turn);
+                case 1:                    
                     break;
                 default :
                     Console.Write(" 잘못된 입력입니다, 다시 입력해주세요! ");
                     CheckUserInput();
                     break;
             } 
-        }
-        static int CheckComputerChoice()
-        {
-            int answer;
-
-            answer = Random.Range(1, 3); // 1~2 랜덤
-            return answer;
-        }
-        static void AttackText(int turn)
-        {
-            if (turn % 2 == 1)
-            {
-                Console.WriteLine();
-                Console.WriteLine(" ~ Player Trun ~ "); // test
-                Console.WriteLine();
-                warrior.AttackAction();
-                Console.WriteLine();
-                gob.TakeDamage(warrior.Attack);
-            }
-            else
-            {
-                Console.WriteLine();
-                Console.WriteLine(" ~ Monster turn ~ "); // test 
-                Console.WriteLine();
-                gob.AttackAction();
-                Console.WriteLine();
-                warrior.TakeDamage(gob.Attack);                
-            }
-        }
+        }        
+        
         static void GameEnd()
         {
             IsPlaying = false;

@@ -166,7 +166,9 @@ namespace TextTurnRpg
                 
                 if (turn % 2 == 1)
                 {
-                    Console.Write(" 다음 행동을 선택하세요 (1~3) : ");
+                    Console.WriteLine(" 1. 공격하기 2. 회복포션 사용하기 3. 도망가기 ");
+                    Console.WriteLine();
+                    Console.Write(" 다음 행동을 선택하세요 (1~3) : ");                    
                     CheckUserInput();
                     Console.WriteLine();
                     Console.WriteLine(" ~ Player Trun ~ "); // test
@@ -185,6 +187,7 @@ namespace TextTurnRpg
                 }
                 turn++;
                 if (warrior.Health <= 0 || gob.Health <= 0)
+                    CheckDead();
                     break;
             }
             Console.ReadKey();
@@ -200,7 +203,8 @@ namespace TextTurnRpg
                     // 도망가기
                     break;
                 case 2:
-                    // 아이템 사용
+                    hpPotion.Use(warrior);
+                    // 인터페이스 IItem use = 빨간 물약 사용해서 체력 회복
                     break;
                 case 1:                    
                     break;

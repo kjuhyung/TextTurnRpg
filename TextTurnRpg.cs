@@ -28,6 +28,7 @@ public class HealthPotion : IItem
     }
     public void Use(Warrior warrior)
     {
+        warrior.Health += Value;
         Console.WriteLine
             ($" {warrior.Name} 이 {Name} 을 사용하여 {warrior.Health} 가 +{Value} 회복되었습니다");
     }
@@ -44,6 +45,7 @@ public class StrengthPotion : IItem
     }
     public void Use(Warrior warrior)
     {
+        warrior.Attack += Value;
         Console.WriteLine
             ($" {warrior.Name} 이 {Name} 을 사용하여 {warrior.Attack} 가 +{Value} 상승하였습니다");
     }
@@ -159,7 +161,6 @@ namespace TextTurnRpg
             Console.WriteLine();
             Console.WriteLine($" 플레이어의 체력 :{warrior.Health} , 몬스터의 체력 :{gob.Health} ");
             
-
             while (IsPlaying)
             {
                 Console.WriteLine();
@@ -170,12 +171,6 @@ namespace TextTurnRpg
                     Console.WriteLine();
                     Console.Write(" 다음 행동을 선택하세요 (1~3) : ");                    
                     CheckUserInput();
-                    Console.WriteLine();
-                    Console.WriteLine(" ~ Player Trun ~ "); // test
-                    Console.WriteLine();
-                    warrior.AttackAction();
-                    Console.WriteLine();
-                    gob.TakeDamage(warrior.Attack);
                 }
                 else
                 {
@@ -184,11 +179,10 @@ namespace TextTurnRpg
                     gob.AttackAction();
                     Console.WriteLine();
                     warrior.TakeDamage(gob.Attack);
+                    turn++;
                 }
-                turn++;
                 if (warrior.Health <= 0 || gob.Health <= 0)
                     CheckDead();
-                    break;
             }
             Console.ReadKey();
         }
@@ -203,10 +197,19 @@ namespace TextTurnRpg
                     // 도망가기
                     break;
                 case 2:
+                    Console.WriteLine();
                     hpPotion.Use(warrior);
+                    turn++;
                     // 인터페이스 IItem use = 빨간 물약 사용해서 체력 회복
                     break;
-                case 1:                    
+                case 1:
+                    Console.WriteLine();
+                    Console.WriteLine(" ~ Player Trun ~ "); // test
+                    Console.WriteLine();
+                    warrior.AttackAction();
+                    Console.WriteLine();
+                    gob.TakeDamage(warrior.Attack);
+                    turn++;
                     break;
                 default :
                     Console.Write(" 잘못된 입력입니다, 다시 입력해주세요! ");
@@ -235,7 +238,7 @@ namespace TextTurnRpg
         static void UseReward()
         {
 
-        } // 보상 아이템 중 선택하여 사용 input , swithch
+        } // 보상 아이템 중 선택하여 사용 input , switch
 
         static void GameSetting()
         {
